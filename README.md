@@ -99,7 +99,7 @@ Para peticiones HTTP (en este caso POST) usé Axios (librería de JS), el cual r
 En este proyecto se usa dentro del cliente React (App.tsx) para hacer llamadas al servidor
 
 
-TESTS
+TESTS (Client)
 | Test                                            | Qué cubre                                               |
 | ----------------------------------------------- | ------------------------------------------------------- |
 | `renders title`                                 | Render inicial y existencia del título                  |
@@ -144,3 +144,59 @@ Interpretación práctica:
 
 El código está completamente testeado.
 El porcentaje menor a 100 % es solo un artefacto de cómo V8 mide JSX, no un problema real.
+
+TEST:ui
+
+> roman-converter-client@1.0.0 test:ui
+> vitest --ui
+
+
+ DEV  v4.0.6 C:/Users/Marian/Documents/roman-converter/server/client
+      UI started at http://localhost:51204/__vitest__/
+
+ ✓ src/App.test.tsx (12 tests) 967ms
+ ✓ src/test/App.server.test.tsx (2 tests) 359ms
+ ✓ src/converters.test.ts (9 tests) 43ms
+
+ Test Files  3 passed (3)
+      Tests  23 passed (23)
+   Start at  12:55:34
+   Duration  26.09s (transform 519ms, setup 2.40s, collect 2.67s, tests 1.37s, environment 16.35s, prepare 270ms)
+
+ PASS 
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+TEST:coverage (Server)
+Test Files  1 passed (1)
+      Tests  8 passed (8)
+   Start at  12:17:50
+   Duration  1.17s (transform 168ms, setup 0ms, collect 222ms, tests 30ms, environment 1ms, prepare 155ms)
+
+ % Coverage report from v8
+---------------|---------|----------|---------|---------|-------------------
+File           | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s
+---------------|---------|----------|---------|---------|-------------------
+All files      |     100 |      100 |     100 |     100 |
+ converters.ts |     100 |      100 |     100 |     100 |
+---------------|---------|----------|---------|---------|-------------------
+
+TEST:ui
+ DEV  v4.0.6 C:/Users/Marian/Documents/roman-converter/server
+      UI started at http://localhost:51204/__vitest__/
+
+ ✓ src/converters.test.ts (8 tests) 26ms
+     ✓ lanza error si el número no es entero 3ms
+     ✓ lanza error si el número está fuera del rango 1-3999 2ms
+   ✓ romanToInt (5)
+     ✓ convierte números romanos válidos a enteros 2ms
+     ✓ ignora espacios y mayúsculas 1ms
+     ✓ lanza error si la cadena es inválida o vacía 2ms
+     ✓ lanza error si contiene caracteres no romanos 2ms
+     ✓ lanza error si el número romano no está en forma canónica 2ms
+
+ Test Files  1 passed (1)
+      Tests  8 passed (8)
+   Start at  12:53:46
+   Duration  1.67s (transform 227ms, setup 0ms, collect 329ms, tests 26ms, environment 1ms, prepare 67ms)
+
+ PASS  
