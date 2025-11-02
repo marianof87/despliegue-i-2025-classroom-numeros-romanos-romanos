@@ -99,7 +99,7 @@ Para peticiones HTTP (en este caso POST) usé Axios (librería de JS), el cual r
 En este proyecto se usa dentro del cliente React (App.tsx) para hacer llamadas al servidor
 
 
-TESTS
+TESTS (Client)
 | Test                                            | Qué cubre                                               |
 | ----------------------------------------------- | ------------------------------------------------------- |
 | `renders title`                                 | Render inicial y existencia del título                  |
@@ -144,3 +144,17 @@ Interpretación práctica:
 
 El código está completamente testeado.
 El porcentaje menor a 100 % es solo un artefacto de cómo V8 mide JSX, no un problema real.
+
+TESTS (Server)
+Test Files  1 passed (1)
+      Tests  8 passed (8)
+   Start at  12:17:50
+   Duration  1.17s (transform 168ms, setup 0ms, collect 222ms, tests 30ms, environment 1ms, prepare 155ms)
+
+ % Coverage report from v8
+---------------|---------|----------|---------|---------|-------------------
+File           | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s
+---------------|---------|----------|---------|---------|-------------------
+All files      |     100 |      100 |     100 |     100 |
+ converters.ts |     100 |      100 |     100 |     100 |
+---------------|---------|----------|---------|---------|-------------------
