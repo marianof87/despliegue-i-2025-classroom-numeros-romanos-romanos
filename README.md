@@ -99,7 +99,13 @@ Para peticiones HTTP (en este caso POST) usé Axios (librería de JS), el cual r
 En este proyecto se usa dentro del cliente React (App.tsx) para hacer llamadas al servidor
 
 
-TESTS (Client)
+TESTS EN CLIENT
+(frontend)
+
+Corren en un entorno simulado de navegador (puede ser jsdom con Vitest, Jest, etc.).
+Evalúan componentes, interacciones, renderizado, hooks de React, etc.
+Por ejemplo, que un botón muestre el número romano correcto cuando se ingresa un entero.
+
 | Test                                            | Qué cubre                                               |
 | ----------------------------------------------- | ------------------------------------------------------- |
 | `renders title`                                 | Render inicial y existencia del título                  |
@@ -134,6 +140,18 @@ App.test.tsx y App.server.test.tsx
 -Tests de servidor (App.server.test.tsx) cubren llamadas a API y manejo de respuestas.
 -V8 coverage considera que toda la lógica JS está cubierta.
 
+TEST:coverage
+
+% Coverage report from v8
+---------------|---------|----------|---------|---------|-------------------
+File           | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s
+---------------|---------|----------|---------|---------|-------------------
+All files      |   96.55 |    91.89 |   88.88 |      98 | 
+ App.css       |       0 |        0 |       0 |       0 | 
+ App.tsx       |   96.29 |    89.47 |   85.71 |   96.15 | 50
+ converters.ts |   96.77 |    94.44 |     100 |     100 | 2
+---------------|---------|----------|---------|---------|-------------------
+
 | Archivo                                | Coverage real | Comentario                                                 |
 | -------------------------------------- | ------------- | ---------------------------------------------------------- |
 | `App.tsx`                              | 96–97 %       | Solo líneas JSX con ternarios o short-circuits no marcadas |
@@ -165,6 +183,35 @@ TEST:ui
 
  PASS 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+TESTS EN SERVER
+(backend)
+
+Corren en Node.js, no en el navegador.
+Evalúan la lógica del negocio, funciones, servicios, validaciones.
+Por ejemplo, funciones intToRoman y romanToInt.
+No necesitan React ni interfaz; simplemente prueban que el código haga lo que debe hacer.
+
+TESTS UNITARIOS
+
+ ✓ src/converters.test.ts (8 tests) 31ms
+   ✓ intToRoman (3)
+     ✓ convierte correctamente números válidos 6ms
+     ✓ lanza error si el número no es entero 4ms
+     ✓ lanza error si el número está fuera del rango 1-3999 3ms
+   ✓ romanToInt (5)
+     ✓ convierte números romanos válidos a enteros 2ms
+     ✓ ignora espacios y mayúsculas 1ms
+     ✓ lanza error si la cadena es inválida o vacía 4ms
+     ✓ lanza error si contiene caracteres no romanos 3ms
+     ✓ lanza error si el número romano no está en forma canónica 2ms
+
+ Test Files  1 passed (1)
+      Tests  8 passed (8)
+   Start at  13:32:40
+   Duration  1.31s (transform 221ms, setup 0ms, collect 297ms, tests 31ms, environment 1ms, prepare 76ms)
+
+ PASS 
+
 
 TEST:coverage (Server)
 Test Files  1 passed (1)
@@ -193,6 +240,28 @@ TEST:ui
      ✓ lanza error si la cadena es inválida o vacía 2ms
      ✓ lanza error si contiene caracteres no romanos 2ms
      ✓ lanza error si el número romano no está en forma canónica 2ms
+
+     TESTS ASSERTIONS
+
+     ✓ src/converters.test.ts (9 tests) 35ms
+   ✓ intToRoman (3)
+     ✓ convierte correctamente números válidos 5ms
+     ✓ lanza error si el número no es entero 3ms
+     ✓ lanza error si el número está fuera del rango 1-3999 3ms
+   ✓ romanToInt (6)
+     ✓ convierte números romanos válidos a enteros 2ms
+     ✓ ignora espacios y mayúsculas/minúsculas mezcladas 1ms
+     ✓ convierte combinaciones complejas correctamente 1ms
+     ✓ lanza error si la cadena es inválida o vacía 2ms
+     ✓ lanza error si contiene caracteres no romanos 4ms
+     ✓ lanza error si el número romano no está en forma canónica 8ms
+
+ Test Files  1 passed (1)
+      Tests  9 passed (9)
+   Start at  15:44:45
+   Duration  1.01s (transform 155ms, setup 0ms, collect 227ms, tests 35ms, environment 1ms, prepare 53ms)
+
+ PASS 
 
  Test Files  1 passed (1)
       Tests  8 passed (8)
