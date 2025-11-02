@@ -191,6 +191,27 @@ Evalúan la lógica del negocio, funciones, servicios, validaciones.
 Por ejemplo, funciones intToRoman y romanToInt.
 No necesitan React ni interfaz; simplemente prueban que el código haga lo que debe hacer.
 
+TESTS UNITARIOS
+
+ ✓ src/converters.test.ts (8 tests) 31ms
+   ✓ intToRoman (3)
+     ✓ convierte correctamente números válidos 6ms
+     ✓ lanza error si el número no es entero 4ms
+     ✓ lanza error si el número está fuera del rango 1-3999 3ms
+   ✓ romanToInt (5)
+     ✓ convierte números romanos válidos a enteros 2ms
+     ✓ ignora espacios y mayúsculas 1ms
+     ✓ lanza error si la cadena es inválida o vacía 4ms
+     ✓ lanza error si contiene caracteres no romanos 3ms
+     ✓ lanza error si el número romano no está en forma canónica 2ms
+
+ Test Files  1 passed (1)
+      Tests  8 passed (8)
+   Start at  13:32:40
+   Duration  1.31s (transform 221ms, setup 0ms, collect 297ms, tests 31ms, environment 1ms, prepare 76ms)
+
+ PASS 
+
 
 TEST:coverage (Server)
 Test Files  1 passed (1)
