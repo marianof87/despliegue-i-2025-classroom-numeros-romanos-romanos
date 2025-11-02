@@ -99,7 +99,13 @@ Para peticiones HTTP (en este caso POST) usé Axios (librería de JS), el cual r
 En este proyecto se usa dentro del cliente React (App.tsx) para hacer llamadas al servidor
 
 
-TESTS (Client)
+TESTS EN CLIENT
+(frontend)
+
+Corren en un entorno simulado de navegador (puede ser jsdom con Vitest, Jest, etc.).
+Evalúan componentes, interacciones, renderizado, hooks de React, etc.
+Por ejemplo, que un botón muestre el número romano correcto cuando se ingresa un entero.
+
 | Test                                            | Qué cubre                                               |
 | ----------------------------------------------- | ------------------------------------------------------- |
 | `renders title`                                 | Render inicial y existencia del título                  |
@@ -177,6 +183,14 @@ TEST:ui
 
  PASS 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+TESTS EN SERVER
+(backend)
+
+Corren en Node.js, no en el navegador.
+Evalúan la lógica del negocio, funciones, servicios, validaciones.
+Por ejemplo, funciones intToRoman y romanToInt.
+No necesitan React ni interfaz; simplemente prueban que el código haga lo que debe hacer.
+
 
 TEST:coverage (Server)
 Test Files  1 passed (1)
