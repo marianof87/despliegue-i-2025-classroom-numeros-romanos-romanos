@@ -6,7 +6,7 @@ App Vercel: https://roman-converter-beryl.vercel.app/
 Usuario Netlify: https://app.netlify.com/teams/marianof87/projects
 App Netlify: https://r2aconverter.netlify.app/
 
-Resumen del funcionamiento
+Resumen del funcionamiento:
 
 Propósito: aplicación full‑stack que convierte números a números romanos.
 Arquitectura: servidor Express (API) + cliente React (UI). Código TypeScript en ambos lados.
