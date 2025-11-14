@@ -1,4 +1,7 @@
 # roman-converter
+
+Vercel: https://roman-converter-beryl.vercel.app/
+Netlify: https://r2aconverter1.netlify.app/
 Resumen del funcionamiento
 
 Propósito: aplicación full‑stack que convierte números a números romanos.
