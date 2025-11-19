@@ -4,49 +4,62 @@
 
 // api/r2a.ts
 // Entero → Romano
-function intToRoman(origNum: number | string): string | null {
-  let num = Number(origNum);
-  if (!Number.isInteger(num) || num <= 0 || num >= 4000) return null;
-  const vals: [number,string][] = [
-    [1000,'M'],[900,'CM'],[500,'D'],[400,'CD'],
-    [100,'C'],[90,'XC'],[50,'L'],[40,'XL'],
-    [10,'X'],[9,'IX'],[5,'V'],[4,'IV'],[1,'I']
-  ];
-  let res = '';
-  for (const [v, r] of vals) {
-    while (num >= v) {
-      res += r;
-      num -= v;
-    }
+// /api/r2a.js
+// Convierte romano -> arábigo. Responde 200 con { roman, value } o 400 con { error }.
+// api/r2a.ts
+// ROMANO -> ARÁBIGO
+
+function romanToInt(s: string): number | null {
+  if (!s || typeof s !== 'string') return null;
+  s = s.toUpperCase().trim();
+  const map: Record<string, number> = { I: 1, V: 5, X: 10, L: 50, C: 100, D: 500, M: 1000 };
+  let total = 0;
+  for (let i = 0; i < s.length; i++) {
+    const curCh = s[i];
+    const nextCh = s[i + 1];
+    const cur = map[curCh];
+    const next = nextCh ? map[nextCh] : undefined;
+    if (cur === undefined) return null;
+    if (next !== undefined && cur < next) total -= cur;
+    else total += cur;
   }
-  return res;
+  return total;
 }
 
-export default function handler(req: any, res: any) {
+export default function handler(req: any, res: any): void {
+  // CORS básico
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET,POST,OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
-  if (req.method === 'OPTIONS') return res.status(200).end();
+  if (req.method === 'OPTIONS') {
+    res.status(200).end();
+    return;
+  }
 
-  let numberParam: any = null;
+  let roman: string | null = null;
   if (req.method === 'GET') {
-    numberParam = req.query && (req.query.number || req.query.n || req.query.q);
+    const q = req.query || {};
+    roman = (q.roman || q.r || q.q) ?? null;
   } else {
     try {
       const body = typeof req.body === 'string' ? JSON.parse(req.body) : (req.body || {});
-      numberParam = body.number || body.n || body.q;
+      roman = body.roman || body.r || body.q || null;
     } catch {
-      numberParam = null;
+      roman = null;
     }
   }
 
-  if (numberParam == null || String(numberParam).trim() === '') {
-    return res.status(400).json({ error: "Parámetro inválido: se esperaba 'number' (ej: ?number=24 o { number: 24 })" });
+  if (!roman || String(roman).trim() === '') {
+    res.status(400).json({ error: "Parámetro inválido: se esperaba 'roman' (ej: ?roman=I)" });
+    return;
   }
 
-  const roman = intToRoman(numberParam);
-  if (roman === null) return res.status(400).json({ error: 'Número inválido. Debe ser entero entre 1 y 3999' });
+  const value = romanToInt(String(roman));
+  if (value === null) {
+    res.status(400).json({ error: 'Número romano inválido' });
+    return;
+  }
 
-  return res.status(200).json({ number: Number(numberParam), roman });
+  res.status(200).json({ roman: String(roman).toUpperCase(), value });
 }

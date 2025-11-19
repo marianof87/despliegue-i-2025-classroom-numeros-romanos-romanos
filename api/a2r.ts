@@ -8,26 +8,31 @@
 // Román → entero (TypeScript, export default para Vercel)
 
 // Convierte una cadena romana válida a entero. Devuelve null si la cadena es inválida.
-function romanToInt(s: string): number | null {
-  if (!s || typeof s !== 'string') return null;
-  s = s.toUpperCase().trim();
-  const map: Record<string, number> = { I: 1, V: 5, X: 10, L: 50, C: 100, D: 500, M: 1000 };
-  let total = 0;
-  for (let i = 0; i < s.length; i++) {
-    const curCh = s[i];
-    const nextCh = s[i + 1];
-    const cur = map[curCh];
-    const next = nextCh ? map[nextCh] : undefined;
-    if (cur === undefined) return null; // caracter inválido
-    if (next !== undefined && cur < next) total -= cur;
-    else total += cur;
+// /api/a2r.js
+// Convierte arábigo -> romano. Responde 200 con { number, roman } o 400 con { error }.
+// api/a2r.ts
+// ARÁBIGO -> ROMANO
+
+function intToRoman(origNum: number | string): string | null {
+  let num: number = Number(origNum);
+  if (!Number.isInteger(num) || num <= 0 || num >= 4000) return null;
+  const vals: [number, string][] = [
+    [1000,'M'],[900,'CM'],[500,'D'],[400,'CD'],
+    [100,'C'],[90,'XC'],[50,'L'],[40,'XL'],
+    [10,'X'],[9,'IX'],[5,'V'],[4,'IV'],[1,'I']
+  ];
+  let res = '';
+  for (const [v, r] of vals) {
+    while (num >= v) {
+      res += r;
+      num -= v;
+    }
   }
-  return total;
+  return res;
 }
 
-// Handler principal (Vercel / serverless). Tipado con any para req/res por simplicidad.
 export default function handler(req: any, res: any): void {
-  // CORS simple para usar desde /public/index.html
+  // CORS básico
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET,POST,OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
@@ -37,32 +42,29 @@ export default function handler(req: any, res: any): void {
     return;
   }
 
-  let roman: string | null = null;
-
+  let numberParam: any = null;
   if (req.method === 'GET') {
-    // Soportamos ?roman=XXIV  o ?r=XXIV  o ?q=XXIV
     const q = req.query || {};
-    roman = (q.roman || q.r || q.q) ?? null;
+    numberParam = (q.number || q.n || q.q);
   } else {
-    // Intentamos parsear JSON body si viene como string
     try {
       const body = typeof req.body === 'string' ? JSON.parse(req.body) : (req.body || {});
-      roman = body.roman || body.r || body.q || null;
+      numberParam = body.number || body.n || body.q;
     } catch {
-      roman = null;
+      numberParam = null;
     }
   }
 
-  if (!roman || String(roman).trim() === '') {
-    res.status(400).json({ error: "Parámetro inválido: se esperaba 'roman' (ej: ?roman=XXIV o { roman: 'XXIV' })" });
+  if (numberParam == null || String(numberParam).trim() === '') {
+    res.status(400).json({ error: "Parámetro inválido: se esperaba 'number' (ej: ?number=7)" });
     return;
   }
 
-  const value = romanToInt(String(roman));
-  if (value === null) {
-    res.status(400).json({ error: 'Número romano inválido' });
+  const roman = intToRoman(numberParam);
+  if (roman === null) {
+    res.status(400).json({ error: 'Número inválido. Debe ser entero entre 1 y 3999' });
     return;
   }
 
-  res.status(200).json({ roman: String(roman).toUpperCase(), value });
+  res.status(200).json({ number: Number(numberParam), roman });
 }
