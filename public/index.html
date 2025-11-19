@@ -1,33 +1,18 @@
-<script>
-  // Usamos '/api' porque tus handlers están en /api/*. El important es usar el endpoint correcto
-  // ROMANO -> ARÁBIGO : /api/r2a?roman=...
-  // ARÁBIGO -> ROMANO : /api/a2r?number=...
-
-  const base = '/api';
-
-  async function toArabic() {
-    const r = document.getElementById('rom').value;
-    if (!r) { alert('Ingresa un número romano'); return; }
-    const url = `${base}/r2a?roman=${encodeURIComponent(r)}`;
-    try {
-      const res = await fetch(url);
-      const json = await res.json();
-      document.getElementById('out1').textContent = res.ok ? JSON.stringify(json) : `Error ${res.status}: ${JSON.stringify(json)}`;
-    } catch (e) {
-      document.getElementById('out1').textContent = 'Fetch error: ' + e.message;
-    }
-  }
-
-  async function toRoman() {
-    const n = document.getElementById('num').value;
-    if (!n) { alert('Ingresa un número'); return; }
-    const url = `${base}/a2r?number=${encodeURIComponent(n)}`;
-    try {
-      const res = await fetch(url);
-      const json = await res.json();
-      document.getElementById('out2').textContent = res.ok ? JSON.stringify(json) : `Error ${res.status}: ${JSON.stringify(json)}`;
-    } catch (e) {
-      document.getElementById('out2').textContent = 'Fetch error: ' + e.message;
-    }
-  }
-</script>
+﻿<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Roman Converter — Test</title>
+  <style>body{font-family:Arial,Helvetica,sans-serif;max-width:800px;margin:40px auto;padding:0 16px;color:#111}</style>
+</head>
+<body>
+  <h1>Roman Converter — Test</h1>
+  <p>Esta es una página de comprobación. Si la ves, el hosting está funcionando.</p>
+  <p>Prueba manualmente los endpoints:</p>
+  <ul>
+    <li><code>/api/r2a?roman=I</code> — ROMANO → ARÁBIGO</li>
+    <li><code>/api/a2r?number=7</code> — ARÁBIGO → ROMANO</li>
+  </ul>
+  <p>Cuando confirmes que esto se ve, restauramos la interfaz completa y probamos las APIs.</p>
+</body>
+</html>
