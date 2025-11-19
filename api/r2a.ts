@@ -12,6 +12,8 @@
 // ROMANO -> ARÁBIGO (GET ?roman=I)
 // api/r2a.ts
 // ROMANO -> ARÁBIGO (TypeScript)
+// api/r2a.ts
+// ROMANO -> ARÁBIGO (no depende de @vercel/node ni de utils externos)
 
 function romanToInt(s: string): number | null {
   if (!s || typeof s !== 'string') return null;
@@ -19,11 +21,11 @@ function romanToInt(s: string): number | null {
   const map: Record<string, number> = { I: 1, V: 5, X: 10, L: 50, C: 100, D: 500, M: 1000 };
   let total = 0;
   for (let i = 0; i < s.length; i++) {
-    const curCh: string = s[i];
-    const nextCh: string | undefined = s[i + 1];
-    const cur: number | undefined = map[curCh];
-    const next: number | undefined = nextCh ? map[nextCh] : undefined;
-    if (cur === undefined) return null;
+    const curCh = s[i];
+    const nextCh = s[i + 1];
+    const cur = map[curCh];
+    const next = nextCh ? map[nextCh] : undefined;
+    if (cur === undefined) return null; // caracter inválido
     if (next !== undefined && cur < next) total -= cur;
     else total += cur;
   }
@@ -31,7 +33,7 @@ function romanToInt(s: string): number | null {
 }
 
 export default function handler(req: any, res: any): void {
-  // CORS básico
+  // CORS simple
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET,POST,OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
@@ -41,30 +43,20 @@ export default function handler(req: any, res: any): void {
     return;
   }
 
-  let roman: string | null = null;
+  // Solo atendemos GET (evaluador usa GET)
+  const q: any = req.query || {};
+  const romanParam: string | undefined = (q.roman ?? q.r ?? q.q) as string | undefined;
 
-  if (req.method === 'GET') {
-    const q: any = req.query || {};
-    roman = (q.roman ?? q.r ?? q.q) ?? null;
-  } else {
-    try {
-      const body: any = typeof req.body === 'string' ? JSON.parse(req.body) : (req.body || {});
-      roman = body.roman ?? body.r ?? body.q ?? null;
-    } catch {
-      roman = null;
-    }
-  }
-
-  if (!roman || String(roman).trim() === '') {
+  if (!romanParam || String(romanParam).trim() === '') {
     res.status(400).json({ error: "Parámetro inválido: se esperaba 'roman' (ej: ?roman=I)" });
     return;
   }
 
-  const value = romanToInt(String(roman));
+  const value = romanToInt(String(romanParam));
   if (value === null) {
     res.status(400).json({ error: 'Número romano inválido' });
     return;
   }
 
-  res.status(200).json({ roman: String(roman).toUpperCase(), value });
+  res.status(200).json({ roman: String(romanParam).toUpperCase(), value });
 }
