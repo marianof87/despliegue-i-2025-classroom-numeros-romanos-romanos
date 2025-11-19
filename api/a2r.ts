@@ -12,15 +12,22 @@
 // Convierte arábigo -> romano. Responde 200 con { number, roman } o 400 con { error }.
 // api/a2r.ts
 // ARÁBIGO -> ROMANO
+// api/a2r.js
+// ARÁBIGO -> ROMANO (GET ?number=7)
+
+// api/a2r.ts
+// ARÁBIGO -> ROMANO (TypeScript)
 
 function intToRoman(origNum: number | string): string | null {
   let num: number = Number(origNum);
   if (!Number.isInteger(num) || num <= 0 || num >= 4000) return null;
+
   const vals: [number, string][] = [
-    [1000,'M'],[900,'CM'],[500,'D'],[400,'CD'],
-    [100,'C'],[90,'XC'],[50,'L'],[40,'XL'],
-    [10,'X'],[9,'IX'],[5,'V'],[4,'IV'],[1,'I']
+    [1000, 'M'], [900, 'CM'], [500, 'D'], [400, 'CD'],
+    [100, 'C'], [90, 'XC'], [50, 'L'], [40, 'XL'],
+    [10, 'X'], [9, 'IX'], [5, 'V'], [4, 'IV'], [1, 'I']
   ];
+
   let res = '';
   for (const [v, r] of vals) {
     while (num >= v) {
@@ -42,14 +49,15 @@ export default function handler(req: any, res: any): void {
     return;
   }
 
-  let numberParam: any = null;
+  let numberParam: string | number | null = null;
+
   if (req.method === 'GET') {
-    const q = req.query || {};
-    numberParam = (q.number || q.n || q.q);
+    const q: any = req.query || {};
+    numberParam = q.number ?? q.n ?? q.q ?? null;
   } else {
     try {
-      const body = typeof req.body === 'string' ? JSON.parse(req.body) : (req.body || {});
-      numberParam = body.number || body.n || body.q;
+      const body: any = typeof req.body === 'string' ? JSON.parse(req.body) : (req.body || {});
+      numberParam = body.number ?? body.n ?? body.q ?? null;
     } catch {
       numberParam = null;
     }

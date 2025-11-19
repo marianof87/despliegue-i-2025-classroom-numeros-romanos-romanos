@@ -8,6 +8,10 @@
 // Convierte romano -> arábigo. Responde 200 con { roman, value } o 400 con { error }.
 // api/r2a.ts
 // ROMANO -> ARÁBIGO
+// api/r2a.js
+// ROMANO -> ARÁBIGO (GET ?roman=I)
+// api/r2a.ts
+// ROMANO -> ARÁBIGO (TypeScript)
 
 function romanToInt(s: string): number | null {
   if (!s || typeof s !== 'string') return null;
@@ -15,10 +19,10 @@ function romanToInt(s: string): number | null {
   const map: Record<string, number> = { I: 1, V: 5, X: 10, L: 50, C: 100, D: 500, M: 1000 };
   let total = 0;
   for (let i = 0; i < s.length; i++) {
-    const curCh = s[i];
-    const nextCh = s[i + 1];
-    const cur = map[curCh];
-    const next = nextCh ? map[nextCh] : undefined;
+    const curCh: string = s[i];
+    const nextCh: string | undefined = s[i + 1];
+    const cur: number | undefined = map[curCh];
+    const next: number | undefined = nextCh ? map[nextCh] : undefined;
     if (cur === undefined) return null;
     if (next !== undefined && cur < next) total -= cur;
     else total += cur;
@@ -38,13 +42,14 @@ export default function handler(req: any, res: any): void {
   }
 
   let roman: string | null = null;
+
   if (req.method === 'GET') {
-    const q = req.query || {};
-    roman = (q.roman || q.r || q.q) ?? null;
+    const q: any = req.query || {};
+    roman = (q.roman ?? q.r ?? q.q) ?? null;
   } else {
     try {
-      const body = typeof req.body === 'string' ? JSON.parse(req.body) : (req.body || {});
-      roman = body.roman || body.r || body.q || null;
+      const body: any = typeof req.body === 'string' ? JSON.parse(req.body) : (req.body || {});
+      roman = body.roman ?? body.r ?? body.q ?? null;
     } catch {
       roman = null;
     }
