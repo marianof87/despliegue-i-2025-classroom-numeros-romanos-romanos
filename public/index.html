@@ -1,21 +1,18 @@
 <script>
-  // Usar '' para root (con vercel.json rewrites) o '/api' si no tienes rewrites.
-  const base = ''; 
+  // Usamos '/api' porque tus handlers están en /api/*. El important es usar el endpoint correcto
+  // ROMANO -> ARÁBIGO : /api/r2a?roman=...
+  // ARÁBIGO -> ROMANO : /api/a2r?number=...
+
+  const base = '/api';
 
   async function toArabic() {
     const r = document.getElementById('rom').value;
     if (!r) { alert('Ingresa un número romano'); return; }
-
-    // Llama a /r2a?roman=... (ROMANO -> ARÁBIGO)
     const url = `${base}/r2a?roman=${encodeURIComponent(r)}`;
     try {
       const res = await fetch(url);
       const json = await res.json();
-      if (!res.ok) {
-        document.getElementById('out1').textContent = `Error ${res.status}: ${JSON.stringify(json)}`;
-      } else {
-        document.getElementById('out1').textContent = JSON.stringify(json);
-      }
+      document.getElementById('out1').textContent = res.ok ? JSON.stringify(json) : `Error ${res.status}: ${JSON.stringify(json)}`;
     } catch (e) {
       document.getElementById('out1').textContent = 'Fetch error: ' + e.message;
     }
@@ -24,17 +21,11 @@
   async function toRoman() {
     const n = document.getElementById('num').value;
     if (!n) { alert('Ingresa un número'); return; }
-
-    // Llama a /a2r?number=... (ARÁBIGO -> ROMANO)
     const url = `${base}/a2r?number=${encodeURIComponent(n)}`;
     try {
       const res = await fetch(url);
       const json = await res.json();
-      if (!res.ok) {
-        document.getElementById('out2').textContent = `Error ${res.status}: ${JSON.stringify(json)}`;
-      } else {
-        document.getElementById('out2').textContent = JSON.stringify(json);
-      }
+      document.getElementById('out2').textContent = res.ok ? JSON.stringify(json) : `Error ${res.status}: ${JSON.stringify(json)}`;
     } catch (e) {
       document.getElementById('out2').textContent = 'Fetch error: ' + e.message;
     }
