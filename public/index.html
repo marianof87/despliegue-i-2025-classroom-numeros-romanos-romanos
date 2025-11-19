@@ -2,15 +2,64 @@
 <html>
 <head>
   <meta charset="utf-8" />
-  <title>Roman Converter — Minimal</title>
-  <style>body{font-family:Arial,Helvetica,sans-serif;max-width:900px;margin:40px auto;padding:0 16px;color:#111}</style>
+  <title>Roman Converter</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <style>
+    body{font-family:Inter, system-ui, Arial, sans-serif;max-width:780px;margin:32px auto;padding:0 16px;color:#111}
+    h1{font-weight:700}
+    .row{margin:14px 0}
+    input{font-size:16px;padding:8px 10px;margin-right:8px}
+    button{font-size:16px;padding:8px 12px}
+    pre{background:#f7f7f8;padding:10px;border-radius:6px;margin-top:8px}
+  </style>
 </head>
 <body>
-  <h1>Roman Converter — Minimal</h1>
-  <p>Si ves esto, Vercel sirve archivos estáticos correctamente.</p>
-  <ul>
-    <li><code>/api/r2a?roman=I</code> — prueba ROMANO → ARÁBIGO</li>
-    <li><code>/api/a2r?number=7</code> — prueba ARÁBIGO → ROMANO</li>
-  </ul>
+  <h1>Roman Converter</h1>
+  <p>Prueba rápida: convierte entre números arábigos y romanos.</p>
+
+  <div class="row">
+    <strong>Romano → Árabe</strong><br/>
+    <input id="rom" placeholder="Ej: XXIV" />
+    <button id="btnToArabic">Convertir</button>
+    <pre id="out1"></pre>
+  </div>
+
+  <div class="row">
+    <strong>Árabe → Romano</strong><br/>
+    <input id="num" placeholder="Ej: 24" />
+    <button id="btnToRoman">Convertir</button>
+    <pre id="out2"></pre>
+  </div>
+
+  <script>
+    // Usamos siempre /api para evitar confusión con rewrites
+    const base = '/api';
+
+    async function fetchJson(url) {
+      const res = await fetch(url);
+      let json;
+      try { json = await res.json(); } catch(e) { json = { error: 'Invalid JSON' }; }
+      return { ok: res.ok, status: res.status, json };
+    }
+
+    async function toArabic() {
+      const r = document.getElementById('rom').value.trim();
+      if (!r) { alert('Ingresa un número romano'); return; }
+      const url = `${base}/r2a?roman=${encodeURIComponent(r)}`;
+      const { ok, status, json } = await fetchJson(url);
+      document.getElementById('out1').textContent = ok ? JSON.stringify(json) : `Error ${status}: ${JSON.stringify(json)}`;
+    }
+
+    async function toRoman() {
+      const n = document.getElementById('num').value.trim();
+      if (!n) { alert('Ingresa un número'); return; }
+      const url = `${base}/a2r?number=${encodeURIComponent(n)}`;
+      const { ok, status, json } = await fetchJson(url);
+      document.getElementById('out2').textContent = ok ? JSON.stringify(json) : `Error ${status}: ${JSON.stringify(json)}`;
+    }
+
+    document.getElementById('btnToArabic').addEventListener('click', toArabic);
+    document.getElementById('btnToRoman').addEventListener('click', toRoman);
+  </script>
 </body>
 </html>
