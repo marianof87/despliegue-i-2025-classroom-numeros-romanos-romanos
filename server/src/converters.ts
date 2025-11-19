@@ -46,3 +46,5 @@ export function romanToInt(raw: string): number {
 
   return total;
 }
+export const arabicToRoman = intToRoman;
+export const romanToArabic = romanToInt;
