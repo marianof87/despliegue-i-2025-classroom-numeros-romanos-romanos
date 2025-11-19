@@ -1,6 +1,6 @@
 // server/api/a2r.ts
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { arabicToRoman } from '../src/converters';
+import { arabicToRoman } from '../server/src/converters';
 
 export default function handler(req: VercelRequest, res: VercelResponse) {
   // --- CORS ---

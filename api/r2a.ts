@@ -1,6 +1,6 @@
 // server/api/r2a.tsimport { VercelRequest, VercelResponse } from "@vercel/node";
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { romanToArabic } from '../src/converters';
+import { romanToArabic } from '../server/src/converters';
 
 export default function handler(req: VercelRequest, res: VercelResponse) {
   // --- CORS ---
